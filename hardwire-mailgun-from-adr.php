@@ -13,7 +13,7 @@
  * Plugin URI: https://github.com/soderlind/hardwire-mailgun-from-adr
  * GitHub Plugin URI: https://github.com/soderlind/hardwire-mailgun-from-adr
  * Description: Set the Mailgun from address using the MAILGUN_FROM_ADDRESS constant. Will override other from addresses.
- * Version:     0.0.1
+ * Version:     1.0.0
  * Author:      Per Soderlind
  * Author URI:  https://soderlind.no
  * Text Domain: hardwire-mailgun-from-adr
@@ -53,4 +53,31 @@ add_filter( 'wp_mail_from', function( string $from_email ) : string {
 	}
 
 	return $from_email;
+} );
+
+/**
+ * Filters the email name.
+ *
+ * Mailgun set the from name resolution in this order:
+ *  1. From name given by headers - {@param $from_name_header}
+ *  2. From name set in Mailgun settings
+ *  3. From `MAILGUN_FROM_NAME` constant
+ *  4. From name constructed as `<your_site_title>` or "WordPress"
+ *
+ * So, if 1 or 2 above is true, the from address will not be set by the MAILGUN_FROM_NAME constant
+ * @link https://github.com/mailgun/wordpress-plugin/blob/9da7978246a3983159c8577c1ac09cedc075a2da/includes/mg-filter.php#L75-L79
+ *
+ *
+ * This filter will override these and use the MAILGUN_FROM_NAME constant.
+ *
+ * @param string $from_email Email address to send from.
+ * @return string Email address to send from.
+ */
+add_filter( 'wp_mail_from_name',function( string $from_name ) : string {
+
+	if ( defined( 'MAILGUN_FROM_NAME' ) ) {
+		$from_name = \MAILGUN_FROM_NAME;
+	}
+
+	return $from_name;
 } );
