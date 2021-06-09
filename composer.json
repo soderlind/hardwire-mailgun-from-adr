@@ -1,0 +1,8 @@
+{
+    "name": "soderlind/hardwire-mailgun-from-adr",
+    "description": "Hardwire the MAILGUN_FROM_ADDRESS as the email FROM address.",
+    "type": "wordpress-plugin",
+    "homepage": "https://github.com/soderlind/hardwire-mailgun-from-adr",
+    "license": "GPL-2.0-or-later",
+    "require": {}
+}
