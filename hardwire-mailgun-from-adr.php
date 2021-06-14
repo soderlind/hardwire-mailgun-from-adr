@@ -1,7 +1,7 @@
 <?php declare( strict_types = 1 );
 
 /**
- * Set Mailgun FROM address.
+ * Hardwire Mailgun FROM address.
  *
  * @package     Soderlind\Plugin\Mailgun
  * @author      Per Soderlind
@@ -9,11 +9,11 @@
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
- * Plugin Name: Hardwire the MAILGUN_FROM_ADDRESS as the email FROM address.
+ * Plugin Name: Hardwire Mailgun FROM address.
  * Plugin URI: https://github.com/soderlind/hardwire-mailgun-from-adr
  * GitHub Plugin URI: https://github.com/soderlind/hardwire-mailgun-from-adr
- * Description: Set the Mailgun from address using the MAILGUN_FROM_ADDRESS constant. Will override other from addresses.
- * Version:     1.0.0
+ * Description: Set the Mailgun from address using the MAILGUN_FROM_ADDRESS constant. Will override other from addresses. Will also hardwire the Ninja Forms email from name and address.
+ * Version:     1.1.0
  * Author:      Per Soderlind
  * Author URI:  https://soderlind.no
  * Text Domain: hardwire-mailgun-from-adr
@@ -81,3 +81,22 @@ add_filter( 'wp_mail_from_name',function( string $from_name ) : string {
 
 	return $from_name;
 } );
+
+/**
+ * Hardwire Ninja Forms from name and from address.
+ */
+add_filter( 'ninja_forms_run_action_settings', function ( $action_settings, $form_id, $action_id, $form_settings ) {
+
+	if ( 'email' === $action_settings['type'] ) {
+		if ( defined( 'MAILGUN_FROM_NAME' ) ) {
+			$action_settings['from_name'] = \MAILGUN_FROM_NAME;
+		}
+
+		if ( defined( 'MAILGUN_FROM_ADDRESS' ) ) {
+			$action_settings['from_address'] = \MAILGUN_FROM_ADDRESS;
+		}
+	}
+
+  return $action_settings;
+},  10, 4 );
+
